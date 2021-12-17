@@ -453,7 +453,7 @@ namespace System.Geometry
 
             bool reduce(float t)
             {
-                return 0 <= t && t <= 1;
+                return Between(t, 0, 1);
             }
 
             if (order == 2)

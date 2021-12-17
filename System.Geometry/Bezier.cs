@@ -251,11 +251,11 @@ namespace System.Geometry
         public Vector2 Position(float t)
         {
             // shortcuts
-            if (t == 0)
+            if (Utils.Approximately(t, 0))
             {
                 return points[0];
             }
-            if (t == 1)
+            if (Utils.Approximately(t, 1))
             {
                 return points[order];
             }
@@ -551,12 +551,12 @@ namespace System.Geometry
 
             resultx = resultx.Where((t) =>
             {
-                return t >= 0 && t <= 1;
+                return Utils.Between(t, 0, 1);
             }).ToArray();
 
             resulty = resulty.Where((t) =>
             {
-                return t >= 0 && t <= 1;
+                return Utils.Between(t, 0, 1);
             }).ToArray();
 
             List<float> rx = resultx.ToList();
