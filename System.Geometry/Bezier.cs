@@ -549,15 +549,8 @@ namespace System.Geometry
                 resulty = resulty.Concat(Utils.Droots(py.ToArray())).ToArray();
             }
 
-            resultx = resultx.Where((t) =>
-            {
-                return Utils.Between(t, 0, 1);
-            }).ToArray();
-
-            resulty = resulty.Where((t) =>
-            {
-                return Utils.Between(t, 0, 1);
-            }).ToArray();
+            resultx = resultx.Where((t) => Utils.Between(t, 0, 1)).ToArray();
+            resulty = resulty.Where((t) => Utils.Between(t, 0, 1)).ToArray();
 
             List<float> rx = resultx.ToList();
             List<float> ry = resulty.ToList();
@@ -804,6 +797,14 @@ namespace System.Geometry
 
             // first pass: split on extrema
             List<float> extrema = Extrema().Values.ToList();
+            for (var i = 0; i < extrema.Count; i++)
+            {
+                if (Utils.Approximately(extrema[i], 0))
+                    extrema[i] = 0;
+                else if (Utils.Approximately(extrema[i], 1))
+                    extrema[i] = 1;
+            }
+
             if (extrema.IndexOf(0) == -1)
             {
                 extrema.Insert(0, 0);
@@ -817,6 +818,9 @@ namespace System.Geometry
                 for (int i = 1; i < extrema.Count; i++)
                 {
                     float t2 = extrema[i];
+                    if (Utils.Approximately(t1, t2))
+                        continue;
+
                     Bezier segment = Split(t1, t2);
                     segment._t1 = t1;
                     segment._t2 = t2;
@@ -841,8 +845,7 @@ namespace System.Geometry
                             t2 -= step;
                             if (abs(t1 - t2) < step)
                             {
-                                // we can never form a reduction
-                                return new List<Bezier>();
+                                return pass2;
                             }
                             segment = p1.Split((float)t1, (float)t2);
                             segment._t1 = Utils.Map((float)t1, 0, 1, p1._t1, p1._t2);
