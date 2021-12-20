@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard1.6;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.9.4.0</Version>
-    <Authors>Mahdi K. Fard</Authors>
+    <Version>1.0.5</Version>
+    <Authors>Ranplan</Authors>
     <PackageIcon>icon.png</PackageIcon>
     <Description>A library for performing Bezier curve computation for .NET Core.
 
@@ -23,7 +23,7 @@ Target platforms:
  - Xamarin
  - ASP.NET Core
  - Blazor (web front-end)</Description>
-    <PackageId>Bezier</PackageId>
+    <PackageId>Ranplan.Bezier</PackageId>
     <PackageReleaseNotes>Fixes few bugs.</PackageReleaseNotes>
     <PackageTags>Bezier Curve Geometry Intersection Arc Line Circle Unity Game</PackageTags>
     <Nullable>enable</Nullable>

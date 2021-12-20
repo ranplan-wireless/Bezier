@@ -7,7 +7,7 @@ namespace System.Geometry
 {
     static internal class Utils
     {
-        const float epsilon = 0.000001f;
+        const float epsilon = 0.001f;
 
         // Legendre-Gauss abscissae with n=24 (x_i values, defined at i=n as the roots of the nth order Legendre polynomial Pn(x))
         private static readonly float[] Tvalues = new[] {
@@ -120,12 +120,12 @@ namespace System.Geometry
 
 
 
-        public static bool Between(float v, float m, float M)
+        public static bool Between(float v, float m, float M, float precision = epsilon)
         {
             return (
               (m <= v && v <= M) ||
-              Approximately(v, m) ||
-              Approximately(v, M)
+              Approximately(v, m, precision) ||
+              Approximately(v, M, precision)
             );
         }
 
