@@ -1391,16 +1391,16 @@ namespace System.Geometry
             if (extrema.Count == 0) return new float[] { 0, 1 };
 
             //ensure leading zero
-            if (extrema[0] != 0)
-            {
+            if (Utils.Approximately(extrema[0], 0))
+                extrema[0] = 0;
+            else
                 extrema.Insert(0, 0);
-            }
 
             //ensure ending 1
-            if (extrema[extrema.Count - 1] != 1)
-            {
+            if (Utils.Approximately(extrema[extrema.Count - 1], 1))
+                extrema[extrema.Count - 1] = 1;
+            else
                 extrema.Add(1);
-            }
 
             return extrema.ToArray();
         }
@@ -1412,8 +1412,10 @@ namespace System.Geometry
 
             for (int i = 1; i < extrema.Length; i++)
             {
-                float extremaSpan = extrema[i] - extrema[i - 1];
-                var arcs = GetArcs(accuracy * extremaSpan, extrema[i - 1], extrema[i]);
+                if (Utils.Approximately(extrema[i - 1], extrema[i]))
+                    continue;
+
+                var arcs = GetArcs(accuracy * (extrema[i] - extrema[i - 1]), extrema[i - 1], extrema[i]);
 
                 foreach (var arc in arcs)
                 {
@@ -1427,16 +1429,19 @@ namespace System.Geometry
             while (startT < endT)
             {
                 var arc = GetLargestArc(this, startT, endT, accuracy);
+                if (arc == null)
+                    yield break;
+
                 var iarc = arc as IInterval;
+
+                if (Utils.Approximately(startT, iarc.Interval.End.Value))
+                    yield return arc;
 
                 startT = iarc.Interval.End.Value;
 
                 float len = arc.Length;
-
                 if (len < 0.0001)
-                {
                     continue;
-                }
 
                 yield return arc;
             }
@@ -1499,7 +1504,7 @@ namespace System.Geometry
                 }
 
                 //exit if lower is the end
-                if (lower.t == upper.t || (lastGoodArc != null && (lastGoodArc != arc) && (Angle.OfArcSpan(arc) - Angle.OfArcSpan(lastGoodArc)) < 0.5))
+                if (Utils.Approximately(lower.t, upper.t) || (lastGoodArc != null && (lastGoodArc != arc) && (Angle.OfArcSpan(arc) - Angle.OfArcSpan(lastGoodArc)) < 0.5))
                 {
                     return lastGoodArc;
                 }
